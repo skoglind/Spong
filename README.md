@@ -1,2 +1,2 @@
-# Spong
+# Game
 Pong Clone
