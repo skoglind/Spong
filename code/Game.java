@@ -9,7 +9,8 @@ import java.awt.image.BufferedImage;
 public class Game extends JFrame {
     private boolean isRunning = false;
     private InputHandler input;
-    private Graphics g;
+    private BufferedImage backBuffer;
+    private Insets insets;
 
     // Game Settings
     private int gameloopFPS = 60;
@@ -40,7 +41,11 @@ public class Game extends JFrame {
         setVisible(true);
 
         // Bind Graphics
-        g = this.getGraphics();
+        insets = getInsets();
+        backBuffer = new BufferedImage((int)getSize().getWidth(),
+                                       (int)getSize().getHeight(),
+                                       BufferedImage.TYPE_INT_RGB);
+
 
         // Bind keyboard input
         input = new InputHandler(this);
@@ -85,17 +90,23 @@ public class Game extends JFrame {
     }
 
     private void render() {
+        Graphics g = getGraphics();
+        Graphics bbg = backBuffer.getGraphics();
+
         // Clear screen
-        g.setColor(gameBackgroundColor);
-        g.fillRect(0, 0, (int)getSize().getWidth(), (int)getSize().getHeight());
+        bbg.setColor(gameBackgroundColor);
+        bbg.fillRect(0, 0, (int)getSize().getWidth(), (int)getSize().getHeight());
 
         // Boundries
-        g.setColor(Color.WHITE);
-        g.drawRect(10, 10, (int)getSize().getWidth() - 20, (int)getSize().getHeight() - 20);
+        bbg.setColor(Color.WHITE);
+        bbg.drawRect(10, 10, (int)getSize().getWidth() - 20, (int)getSize().getHeight() - 20);
 
         // Draw sprites
-        g.setColor(Color.WHITE);
-        player.Draw(g);
+        bbg.setColor(Color.WHITE);
+        player.Draw(bbg);
+
+        // Draw to screen
+        g.drawImage(backBuffer, insets.left, insets.top, this);
     }
 
     public static void main(String[] args) {
