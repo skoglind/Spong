@@ -3,7 +3,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 /**
- * Game - A PONG Clone
+ * Spong - A PONG Clone
  * @author Fredrik Skoglind
  */
 public class Game extends JFrame {
@@ -14,11 +14,19 @@ public class Game extends JFrame {
 
     // Game Settings
     private int gameloopFPS = 60;
-    private Color gameBackgroundColor = Color.BLACK;
+    private Color gameBackground = Color.BLACK;
+    private Color gameForeground = Color.WHITE;
+    private Rectangle screenSize;
 
     // Game Variables
-    private Sprite player;
+    private Sprite playerOne;
+    private Sprite playerTwo;
+    private Rectangle playerOneBoundries;
+    private Rectangle playerTwoBoundries;
 
+    /**
+     * Initialize Game
+     */
     private void setupGame() {
         isRunning = true;
 
@@ -37,23 +45,43 @@ public class Game extends JFrame {
         getContentPane().setCursor(blankCursor);
 
         // Show JFrame window
-        getContentPane().setBackground( gameBackgroundColor );
+        getContentPane().setBackground( gameBackground );
         setVisible(true);
+
+        // Get screen data
+        screenSize = new Rectangle(0, 0, (int)getSize().getWidth(), (int)getSize().getHeight());
 
         // Bind Graphics
         insets = getInsets();
-        backBuffer = new BufferedImage((int)getSize().getWidth(),
-                                       (int)getSize().getHeight(),
-                                       BufferedImage.TYPE_INT_RGB);
-
+        backBuffer = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
 
         // Bind keyboard input
         input = new InputHandler(this);
 
-        // Game Variables
-        player = new Sprite(20, 10, 0, 10, 20, 100);
+        // Player Settings
+        int playerSpeedX = 0;
+        int playerSpeedY = 25;
+        int playerWidth = 20;
+        int playerHeight = 100;
+        int playerOneOffsetX = 20;
+        int playerTwoOffsetX = 20;
+
+        // Player One
+        playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, screenSize.height-1);
+        playerOne = new Sprite(playerOneOffsetX, ((screenSize.x + screenSize.height)/2)-(playerHeight/2),
+                playerSpeedX, playerSpeedY, playerWidth, playerHeight);
+
+        // Player Two
+        playerTwoBoundries = new Rectangle((screenSize.x + screenSize.width) - (playerTwoOffsetX + playerWidth), 0,
+                playerWidth, screenSize.height-1);
+        playerTwo = new Sprite((screenSize.x + screenSize.width) - (playerTwoOffsetX + playerWidth),
+                ((screenSize.x + screenSize.height)/2)-(playerHeight/2),
+                playerSpeedX, playerSpeedY, playerWidth, playerHeight);
     }
 
+    /**
+     * Run Game
+     */
     private void playGame() {
         setupGame();
 
@@ -69,43 +97,58 @@ public class Game extends JFrame {
         System.exit(0);
     }
 
+    /**
+     * Game Logic
+     */
     private void logic() {
-        boolean moveUp = false;
-        boolean moveDown = false;
+        // Movement (Player One)
+            boolean moveOneUp = false;
+            boolean moveOneDown = false;
 
-        if(input.up.keyDown) { moveUp = true; }
-        if(input.down.keyDown) { moveDown = true; }
+            if(input.up.keyDown) { moveOneUp = true; }
+            if(input.down.keyDown) { moveOneDown = true; }
 
-        int boundryTop = 10 + 5;
-        int boundryBottom = (int)getSize().getHeight() - (10 + player.getHeight() + 5);
-        if(moveUp && !moveDown) {
-            if(player.getPositionY() >= boundryTop) {
-                player.moveUp();
+            if(moveOneUp && !moveOneDown) {
+                playerOne.moveUp(playerOneBoundries);
+            } else if(moveOneDown && !moveOneUp) {
+                playerOne.moveDown(playerOneBoundries);
             }
-        } else if(moveDown && !moveUp) {
-            if(player.getPositionY() <= boundryBottom) {
-                player.moveDown();
+
+        // Movement (Player Two)
+            boolean moveTwoUp = false;
+            boolean moveTwoDown = false;
+
+            if(input.up_w.keyDown) { moveTwoUp = true; }
+            if(input.down_s.keyDown) { moveTwoDown = true; }
+
+            if(moveTwoUp && !moveTwoDown) {
+                playerTwo.moveUp(playerTwoBoundries);
+            } else if(moveTwoDown && !moveTwoUp) {
+                playerTwo.moveDown(playerTwoBoundries);
             }
-        }
     }
 
+    /**
+     * Render Graphics
+     */
     private void render() {
         Graphics g = getGraphics();
         Graphics bbg = backBuffer.getGraphics();
 
         // Clear screen
-        bbg.setColor(gameBackgroundColor);
-        bbg.fillRect(0, 0, (int)getSize().getWidth(), (int)getSize().getHeight());
+        bbg.setColor(gameBackground);
+        bbg.fillRect(screenSize.x, screenSize.y, screenSize.width, screenSize.height);
 
         // Boundries
-        bbg.setColor(Color.WHITE);
-        bbg.drawRect(10, 10, (int)getSize().getWidth() - 20, (int)getSize().getHeight() - 20);
+        bbg.setColor(gameForeground);
+        bbg.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
+        bbg.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
 
-        // Draw sprites
-        bbg.setColor(Color.WHITE);
-        player.Draw(bbg);
+        // Draw Players
+        playerOne.Draw(bbg);
+        playerTwo.Draw(bbg);
 
-        // Draw to screen
+        // Draw buffer to screen
         g.drawImage(backBuffer, insets.left, insets.top, this);
     }
 
