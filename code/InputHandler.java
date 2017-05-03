@@ -30,16 +30,13 @@ public class InputHandler implements KeyListener {
     public List<Key> keys = new ArrayList<>();
 
     public Key escape = new Key();
+    public Key debug = new Key();
 
-    public Key up = new Key();
-    public Key down = new Key();
-    public Key left = new Key();
-    public Key right = new Key();
+    public Key up_p1 = new Key();
+    public Key down_p1 = new Key();
 
-    public Key up_w = new Key();
-    public Key down_s = new Key();
-    public Key left_a = new Key();
-    public Key right_d = new Key();
+    public Key up_p2 = new Key();
+    public Key down_p2 = new Key();
 
     public void releaseAll() {
         for (int i = 0; i < keys.size(); i++) {
@@ -50,15 +47,13 @@ public class InputHandler implements KeyListener {
     private void toggle(KeyEvent e, boolean keyPress) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) { escape.toggle(keyPress); }
 
-        if(e.getKeyCode() == KeyEvent.VK_UP) { up.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_DOWN) { down.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_LEFT) { left.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_RIGHT) { right.toggle(keyPress); }
+        if(e.getKeyCode() == KeyEvent.VK_UP) { up_p1.toggle(keyPress); }
+        if(e.getKeyCode() == KeyEvent.VK_DOWN) { down_p1.toggle(keyPress); }
 
-        if(e.getKeyCode() == KeyEvent.VK_W) { up_w.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_S) { down_s.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_A) { left_a.toggle(keyPress); }
-        if(e.getKeyCode() == KeyEvent.VK_D) { right_d.toggle(keyPress); }
+        if(e.getKeyCode() == KeyEvent.VK_1) { up_p2.toggle(keyPress); }
+        if(e.getKeyCode() == KeyEvent.VK_Q) { down_p2.toggle(keyPress); }
+
+        if(e.getKeyCode() == KeyEvent.VK_0) { debug.toggle(keyPress); }
     }
 
     @Override

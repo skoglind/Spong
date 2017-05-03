@@ -12,6 +12,9 @@ public class Game extends JFrame {
     private BufferedImage backBuffer;
     private Insets insets;
 
+    // Debug Settings
+    private boolean showBoundries = false;
+
     // Game Settings
     private int gameloopFPS = 60;
     private Color gameBackground = Color.BLACK;
@@ -23,6 +26,8 @@ public class Game extends JFrame {
     private Sprite playerTwo;
     private Rectangle playerOneBoundries;
     private Rectangle playerTwoBoundries;
+    private Sprite ball;
+    private Rectangle ballBoundries;
 
     /**
      * Initialize Game
@@ -77,6 +82,14 @@ public class Game extends JFrame {
         playerTwo = new Sprite(screenSize.width - (playerTwoOffsetX + playerWidth),
                 (screenSize.height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
+
+        // Ball
+        int ballSpeed = 10;
+        int ballSize = 20;
+
+        ballBoundries = new Rectangle(screenSize.x, screenSize.y, screenSize.width-1, screenSize.height-1);
+        ball = new Sprite((screenSize.width/2)-(ballSize/2), (screenSize.height/2)-(ballSize/2),
+                ballSpeed, ballSpeed, ballSize, ballSize);
     }
 
     /**
@@ -90,6 +103,11 @@ public class Game extends JFrame {
                 System.out.println("ESCAPE");
                 isRunning = false;
                 System.exit(0);
+            }
+
+            // Show Debug info
+            if(input.debug.keyDown) {
+                showBoundries = true;
             }
 
             logic();
@@ -109,14 +127,14 @@ public class Game extends JFrame {
             boolean moveOneUp = false;
             boolean moveOneDown = false;
 
-            if(input.up.keyDown) { moveOneUp = true; }
-            if(input.down.keyDown) { moveOneDown = true; }
+            if(input.up_p1.keyDown) { moveOneUp = true; }
+            if(input.down_p1.keyDown) { moveOneDown = true; }
 
             if(moveOneUp && !moveOneDown) {
-                System.out.println("UP");
+                System.out.println("UP_P1");
                 playerOne.moveUp(playerOneBoundries);
             } else if(moveOneDown && !moveOneUp) {
-                System.out.println("DOWN");
+                System.out.println("DOWN_P1");
                 playerOne.moveDown(playerOneBoundries);
             }
 
@@ -124,16 +142,23 @@ public class Game extends JFrame {
             boolean moveTwoUp = false;
             boolean moveTwoDown = false;
 
-            if(input.up_w.keyDown) { moveTwoUp = true; }
-            if(input.down_s.keyDown) { moveTwoDown = true; }
+            if(input.up_p2.keyDown) { moveTwoUp = true; }
+            if(input.down_p2.keyDown) { moveTwoDown = true; }
 
             if(moveTwoUp && !moveTwoDown) {
-                System.out.println("UP_W");
+                System.out.println("UP_P2");
                 playerTwo.moveUp(playerTwoBoundries);
             } else if(moveTwoDown && !moveTwoUp) {
-                System.out.println("DOWN_S");
+                System.out.println("DOWN_P2");
                 playerTwo.moveDown(playerTwoBoundries);
             }
+
+        // Movement (Ball)
+            // Random start movement
+            // Continue in that position
+            // On Top/Bottom, do bounce
+            // On Left/Right add to player score, kill, and make new ball
+            // On paddle touch bounce
     }
 
     /**
@@ -148,13 +173,20 @@ public class Game extends JFrame {
         bbg.fillRect(0, 0, screenSize.width, screenSize.height);
 
         // Boundries
-        bbg.setColor(gameForeground);
-        bbg.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
-        bbg.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
+        if(showBoundries) {
+            bbg.setColor(Color.RED);
+            bbg.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
+            bbg.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
+            bbg.setColor(Color.YELLOW);
+            bbg.drawRect(ballBoundries.x, ballBoundries.y, ballBoundries.width, ballBoundries.height);
+        }
 
         // Draw Players
         playerOne.Draw(bbg);
         playerTwo.Draw(bbg);
+
+        // Draw Ball
+        ball.Draw(bbg);
 
         // Draw buffer to screen
         g.drawImage(backBuffer, insets.left, insets.top, this);
