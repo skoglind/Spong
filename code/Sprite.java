@@ -68,13 +68,13 @@ public class Sprite implements Drawable {
 
     public void moveDown(Rectangle boundries) {
         int newPositionY = this.positionY + this.velocityY;
-        if( newPositionY + this.height > boundries.y + boundries.height ) { newPositionY = (boundries.y + boundries.height) - height; }
+        if( (newPositionY + this.height) > (boundries.y + boundries.height) ) { newPositionY = (boundries.y + boundries.height) - height; }
         this.move(this.positionX, newPositionY);
     }
 
     public void moveRight(Rectangle boundries) {
         int newPositionX = this.positionX + this.velocityX;
-        if( newPositionX + width > boundries.x + boundries.width ) { newPositionX = (boundries.x + boundries.width) - width ; }
+        if( (newPositionX + width) > (boundries.x + boundries.width) ) { newPositionX = (boundries.x + boundries.width) - width ; }
         this.move(newPositionX, this.positionY);
     }
 

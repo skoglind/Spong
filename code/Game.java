@@ -30,29 +30,29 @@ public class Game extends JFrame {
     private void setupGame() {
         isRunning = true;
 
-        // JFrame - Setup
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
-        setUndecorated(true);
-
-        GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
-        if (gd.isFullScreenSupported()) {
-            gd.setFullScreenWindow(this);
-        }
-
         // Hide mousecursor
         BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
         Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
         getContentPane().setCursor(blankCursor);
 
         // Show JFrame window
-        getContentPane().setBackground( gameBackground );
+        setTitle("Spong");
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setSize(800,600);
+        getContentPane().setBackground( Color.YELLOW );
+        setLocationRelativeTo(null);
         setVisible(true);
 
         // Get screen data
-        screenSize = new Rectangle(0, 0, (int)getSize().getWidth(), (int)getSize().getHeight());
+        insets = getInsets();
+
+        // Get screen data
+        screenSize = new Rectangle(0, 0,
+                (int)getContentPane().getSize().getWidth(),
+                (int)getContentPane().getSize().getHeight());
 
         // Bind Graphics
-        insets = getInsets();
         backBuffer = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
 
         // Bind keyboard input
@@ -68,14 +68,14 @@ public class Game extends JFrame {
 
         // Player One
         playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, screenSize.height-1);
-        playerOne = new Sprite(playerOneOffsetX, ((screenSize.x + screenSize.height)/2)-(playerHeight/2),
+        playerOne = new Sprite(playerOneOffsetX, (screenSize.height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
 
         // Player Two
-        playerTwoBoundries = new Rectangle((screenSize.x + screenSize.width) - (playerTwoOffsetX + playerWidth), 0,
+        playerTwoBoundries = new Rectangle(screenSize.width - (playerTwoOffsetX + playerWidth), 0,
                 playerWidth, screenSize.height-1);
-        playerTwo = new Sprite((screenSize.x + screenSize.width) - (playerTwoOffsetX + playerWidth),
-                ((screenSize.x + screenSize.height)/2)-(playerHeight/2),
+        playerTwo = new Sprite(screenSize.width - (playerTwoOffsetX + playerWidth),
+                (screenSize.height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
     }
 
@@ -86,7 +86,11 @@ public class Game extends JFrame {
         setupGame();
 
         while(isRunning) {
-            if(input.escape.keyDown) { isRunning = false; }
+            if(input.escape.keyDown) {
+                System.out.println("ESCAPE");
+                isRunning = false;
+                System.exit(0);
+            }
 
             logic();
             render();
@@ -109,8 +113,10 @@ public class Game extends JFrame {
             if(input.down.keyDown) { moveOneDown = true; }
 
             if(moveOneUp && !moveOneDown) {
+                System.out.println("UP");
                 playerOne.moveUp(playerOneBoundries);
             } else if(moveOneDown && !moveOneUp) {
+                System.out.println("DOWN");
                 playerOne.moveDown(playerOneBoundries);
             }
 
@@ -122,8 +128,10 @@ public class Game extends JFrame {
             if(input.down_s.keyDown) { moveTwoDown = true; }
 
             if(moveTwoUp && !moveTwoDown) {
+                System.out.println("UP_W");
                 playerTwo.moveUp(playerTwoBoundries);
             } else if(moveTwoDown && !moveTwoUp) {
+                System.out.println("DOWN_S");
                 playerTwo.moveDown(playerTwoBoundries);
             }
     }
@@ -137,7 +145,7 @@ public class Game extends JFrame {
 
         // Clear screen
         bbg.setColor(gameBackground);
-        bbg.fillRect(screenSize.x, screenSize.y, screenSize.width, screenSize.height);
+        bbg.fillRect(0, 0, screenSize.width, screenSize.height);
 
         // Boundries
         bbg.setColor(gameForeground);

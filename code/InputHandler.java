@@ -41,6 +41,12 @@ public class InputHandler implements KeyListener {
     public Key left_a = new Key();
     public Key right_d = new Key();
 
+    public void releaseAll() {
+        for (int i = 0; i < keys.size(); i++) {
+            keys.get(i).keyDown = false;
+        }
+    }
+
     private void toggle(KeyEvent e, boolean keyPress) {
         if(e.getKeyCode() == KeyEvent.VK_ESCAPE) { escape.toggle(keyPress); }
 
