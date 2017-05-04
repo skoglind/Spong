@@ -5,6 +5,9 @@ import java.util.List;
 
 /**
  * InputHandler Class
+ *
+ * Creds to Notch (MiniCraft) for this class.
+ *
  * @author Fredrik Skoglind
  */
 public class InputHandler implements KeyListener {

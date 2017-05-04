@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Random;
 
 /**
  * Spong - A PONG Clone
@@ -11,6 +12,7 @@ public class Game extends JFrame {
     private InputHandler input;
     private BufferedImage backBuffer;
     private Insets insets;
+    private Random rnd;
 
     // Debug Settings
     private boolean showBoundries = false;
@@ -22,11 +24,11 @@ public class Game extends JFrame {
     private Rectangle screenSize;
 
     // Game Variables
-    private Sprite playerOne;
-    private Sprite playerTwo;
+    private Paddle playerOne;
+    private Paddle playerTwo;
     private Rectangle playerOneBoundries;
     private Rectangle playerTwoBoundries;
-    private Sprite ball;
+    private Ball ball;
     private Rectangle ballBoundries;
 
     /**
@@ -63,9 +65,21 @@ public class Game extends JFrame {
         // Bind keyboard input
         input = new InputHandler(this);
 
+        // Pseudo-Random Generator
+        rnd = new Random();
+
+        // Start Game
+        this.setupPlayers();
+        this.resetBall();
+    }
+
+    /**
+     * Players
+     */
+    private void setupPlayers() {
         // Player Settings
         int playerSpeedX = 0;
-        int playerSpeedY = 25;
+        int playerSpeedY = 30;
         int playerWidth = 20;
         int playerHeight = 100;
         int playerOneOffsetX = 20;
@@ -73,23 +87,37 @@ public class Game extends JFrame {
 
         // Player One
         playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, screenSize.height-1);
-        playerOne = new Sprite(playerOneOffsetX, (screenSize.height/2)-(playerHeight/2),
+        playerOne = new Paddle(playerOneOffsetX, (screenSize.height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
 
         // Player Two
         playerTwoBoundries = new Rectangle(screenSize.width - (playerTwoOffsetX + playerWidth), 0,
                 playerWidth, screenSize.height-1);
-        playerTwo = new Sprite(screenSize.width - (playerTwoOffsetX + playerWidth),
+        playerTwo = new Paddle(screenSize.width - (playerTwoOffsetX + playerWidth),
                 (screenSize.height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
+    }
 
+    /**
+     * Ball
+     */
+    private void resetBall() {
         // Ball
         int ballSpeed = 10;
         int ballSize = 20;
+        double velocityIncrease = 1.2;
+        int maxBallSpeed = 50;
+
+        double directionX = (double)(rnd.nextInt(2)-1);
+        double directionY = (double)(rnd.nextInt(2)-1);
+
+        System.out.println(directionX);
+        System.out.println(directionY);
 
         ballBoundries = new Rectangle(screenSize.x, screenSize.y, screenSize.width-1, screenSize.height-1);
-        ball = new Sprite((screenSize.width/2)-(ballSize/2), (screenSize.height/2)-(ballSize/2),
-                ballSpeed, ballSpeed, ballSize, ballSize);
+        ball = new Ball((screenSize.width/2)-(ballSize/2), (screenSize.height/2)-(ballSize/2),
+                ballSpeed, ballSpeed, ballSize, ballSize, velocityIncrease, maxBallSpeed);
+        ball.setDirection(directionX, directionY);
     }
 
     /**
@@ -154,6 +182,9 @@ public class Game extends JFrame {
             }
 
         // Movement (Ball)
+            if(!ball.updatePosition(ballBoundries)) {
+                this.resetBall();
+            }
             // Random start movement
             // Continue in that position
             // On Top/Bottom, do bounce
