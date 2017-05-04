@@ -1,10 +1,11 @@
 import java.awt.*;
 import java.util.Random;
 
-public class GameController {
-    private GraphicsHandler gh;
-    private InputHandler input;
-
+/**
+ * GameController
+ * @author Fredrik Skoglind
+ */
+public class GameController extends Controller {
     public boolean showBoundries = false;
 
     private Paddle playerOne;
@@ -13,22 +14,27 @@ public class GameController {
     private Rectangle playerTwoBoundries;
     private Ball ball;
     private Rectangle ballBoundries;
-    private Random rnd;
-
-    private Color gameBackground = Color.BLACK;
-    private Color gameForeground = Color.WHITE;
 
     public GameController(GraphicsHandler gh, InputHandler input) {
-        this.gh = gh;
-        this.input = input;
-
-        this.init();
+        super(gh, input);
     }
 
     public void init() {
-        rnd = new Random();
+        dispose();
         this.setupPlayers();
-        this.resetBall();
+        this.setupBall();
+    }
+
+    public void dispose() {
+        super.dispose();
+
+        playerOne = null;
+        playerTwo = null;
+        playerOneBoundries = null;
+        playerTwoBoundries = null;
+        ball = null;
+        ballBoundries = null;
+        showBoundries = false;
     }
 
     public void logic() {
@@ -45,10 +51,8 @@ public class GameController {
         if(input.down_p1.keyDown) { moveOneDown = true; }
 
         if(moveOneUp && !moveOneDown) {
-            System.out.println("UP_P1");
             playerOne.moveUp(playerOneBoundries);
         } else if(moveOneDown && !moveOneUp) {
-            System.out.println("DOWN_P1");
             playerOne.moveDown(playerOneBoundries);
         }
 
@@ -60,16 +64,14 @@ public class GameController {
         if(input.down_p2.keyDown) { moveTwoDown = true; }
 
         if(moveTwoUp && !moveTwoDown) {
-            System.out.println("UP_P2");
             playerTwo.moveUp(playerTwoBoundries);
         } else if(moveTwoDown && !moveTwoUp) {
-            System.out.println("DOWN_P2");
             playerTwo.moveDown(playerTwoBoundries);
         }
 
         // Movement (Ball)
         if(!ball.updatePosition(ballBoundries)) {
-            this.resetBall();
+            this.setupBall();
         }
     }
 
@@ -104,11 +106,7 @@ public class GameController {
         gh.render();
     }
 
-    /**
-     * Players
-     */
     private void setupPlayers() {
-        // Player Settings
         int playerSpeedX = 0;
         int playerSpeedY = 30;
         int playerWidth = 20;
@@ -129,18 +127,13 @@ public class GameController {
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
     }
 
-    /**
-     * Ball
-     */
-    private void resetBall() {
-        // Ball
+    private void setupBall() {
         int ballSpeed = 10;
         int ballSize = 20;
         double velocityIncrease = 1.2;
         int maxBallSpeed = 50;
 
         int direction = rnd.nextInt(360);
-        System.out.println("BALL DIRECTION: " + direction);
 
         ballBoundries = new Rectangle(gh.getScreenSize().x, gh.getScreenSize().y, gh.getScreenSize().width-1, gh.getScreenSize().height-1);
         ball = new Ball((gh.getScreenSize().width/2)-(ballSize/2), (gh.getScreenSize().height/2)-(ballSize/2),

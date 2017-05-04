@@ -1,6 +1,3 @@
-import java.awt.*;
-import java.util.Random;
-
 /**
  * Spong - A PONG Clone
  * @author Fredrik Skoglind
@@ -9,6 +6,7 @@ public class Game {
     private boolean isRunning = false;
     private InputHandler input;
     private GraphicsHandler gh;
+    public GameState state;
 
     // Game Settings
     private String gameTitle = "Spong";
@@ -16,12 +14,11 @@ public class Game {
     private int windowHeight = 600;
     private int gameloopFPS = 60;
 
-    // Gamestates
+    // Controllers
     private GameController gc;
+    private MenuController menu;
+    private PauseController pause;
 
-    /**
-     * Initialize Game
-     */
     private void init() {
         isRunning = true;
 
@@ -34,23 +31,37 @@ public class Game {
 
         // Controllers
         gc = new GameController(gh, input);
+        menu = new MenuController(gh, input);
+        pause = new PauseController(gh, input);
+
+        // Startstate
+        state = GameState.GAME;
+        gc.init();
     }
 
-    /**
-     * Run Game
-     */
     private void run() {
         init();
 
         while(isRunning) {
             if(input.escape.keyDown) {
-                System.out.println("ESCAPE");
                 isRunning = false;
                 System.exit(0);
             }
 
-            gc.logic();
-            gc.render();
+            switch(state) {
+                case MENU:
+                    menu.logic();
+                    menu.render();
+                    break;
+                case GAME:
+                    gc.logic();
+                    gc.render();
+                    break;
+                case PAUSE:
+                    pause.logic();
+                    pause.render();
+                    break;
+            }
 
             try { Thread.sleep(1000/gameloopFPS); } catch(Exception e) { }
         }
