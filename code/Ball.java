@@ -5,13 +5,11 @@ import java.awt.*;
  * @author Fredrik Skoglind
  */
 public class Ball extends Sprite {
+    private int direction;
     private double directionX;
     private double directionY;
     private double velocityIncrease;
     private int maxBallSpeed;
-    private int oldPositionX;
-    private int oldPositionY;
-    private int bounces = 0;
 
     public Ball(int positionX, int positionY, int velocityX, int velocityY, int width, int height, double velocityIncrease, int maxBallSpeed) {
         super(positionX, positionY, velocityX, velocityY, width, height);
@@ -25,12 +23,18 @@ public class Ball extends Sprite {
         if(degree > 85 && degree < 95) { degree = 85; }
         if(degree > 265 && degree < 275) { degree = 275; }
 
+        this.direction = degree;
+
         double radians = (Math.PI/180 * degree);
         System.out.println("  - X: " + Math.cos(radians));
         System.out.println("  - Y: " + -Math.sin(radians));
 
         this.directionX = Math.cos(radians);
         this.directionY = -Math.sin(radians);
+    }
+
+    public int getDirection() {
+        return this.direction;
     }
 
     public void increaseVelocity() {
@@ -51,9 +55,6 @@ public class Ball extends Sprite {
         boolean stillAlive = true;
         int newPositionX = (int)(this.positionX + (this.directionX * this.velocityX));
         int newPositionY = (int)(this.positionY + (this.directionY * this.velocityY));
-
-        this.oldPositionX = this.positionX;
-        this.oldPositionY = this.positionY;
 
         // Bounce on boundries
         if(newPositionY < boundries.y) {

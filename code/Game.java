@@ -1,29 +1,28 @@
-import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Random;
 
 /**
  * Spong - A PONG Clone
  * @author Fredrik Skoglind
  */
-public class Game extends JFrame {
+public class Game {
     private boolean isRunning = false;
     private InputHandler input;
-    private BufferedImage backBuffer;
-    private Insets insets;
+    private GraphicsHandler gh;
     private Random rnd;
 
     // Debug Settings
     private boolean showBoundries = false;
 
     // Game Settings
+    private String gameTitle = "Spong";
+    private int windowWidth = 800;
+    private int windowHeight = 600;
     private int gameloopFPS = 60;
     private Color gameBackground = Color.BLACK;
     private Color gameForeground = Color.WHITE;
-    private Rectangle screenSize;
 
-    // Game Variables
+    // Game Items
     private Paddle playerOne;
     private Paddle playerTwo;
     private Rectangle playerOneBoundries;
@@ -37,33 +36,12 @@ public class Game extends JFrame {
     private void setupGame() {
         isRunning = true;
 
-        // Hide mousecursor
-        BufferedImage cursorImg = new BufferedImage(16, 16, BufferedImage.TYPE_INT_ARGB);
-        Cursor blankCursor = Toolkit.getDefaultToolkit().createCustomCursor(cursorImg, new Point(0, 0), "blank cursor");
-        getContentPane().setCursor(blankCursor);
-
-        // Show JFrame window
-        setTitle("Spong");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setResizable(false);
-        setSize(800,600);
-        getContentPane().setBackground( Color.YELLOW );
-        setLocationRelativeTo(null);
-        setVisible(true);
-
-        // Get screen data
-        insets = getInsets();
-
-        // Get screen data
-        screenSize = new Rectangle(0, 0,
-                (int)getContentPane().getSize().getWidth(),
-                (int)getContentPane().getSize().getHeight());
-
-        // Bind Graphics
-        backBuffer = new BufferedImage(screenSize.width, screenSize.height, BufferedImage.TYPE_INT_RGB);
+        // Graphics
+        gh = new GraphicsHandler(gameTitle, windowWidth, windowHeight);
+        gh.showWindow();
 
         // Bind keyboard input
-        input = new InputHandler(this);
+        input = new InputHandler(gh);
 
         // Pseudo-Random Generator
         rnd = new Random();
@@ -86,15 +64,15 @@ public class Game extends JFrame {
         int playerTwoOffsetX = 20;
 
         // Player One
-        playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, screenSize.height-1);
-        playerOne = new Paddle(playerOneOffsetX, (screenSize.height/2)-(playerHeight/2),
+        playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, gh.getScreenSize().height-1);
+        playerOne = new Paddle(playerOneOffsetX, (gh.getScreenSize().height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
 
         // Player Two
-        playerTwoBoundries = new Rectangle(screenSize.width - (playerTwoOffsetX + playerWidth), 0,
-                playerWidth, screenSize.height-1);
-        playerTwo = new Paddle(screenSize.width - (playerTwoOffsetX + playerWidth),
-                (screenSize.height/2)-(playerHeight/2),
+        playerTwoBoundries = new Rectangle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth), 0,
+                playerWidth, gh.getScreenSize().height-1);
+        playerTwo = new Paddle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth),
+                (gh.getScreenSize().height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
     }
 
@@ -111,8 +89,8 @@ public class Game extends JFrame {
         int direction = rnd.nextInt(360);
         System.out.println("BALL DIRECTION: " + direction);
 
-        ballBoundries = new Rectangle(screenSize.x, screenSize.y, screenSize.width-1, screenSize.height-1);
-        ball = new Ball((screenSize.width/2)-(ballSize/2), (screenSize.height/2)-(ballSize/2),
+        ballBoundries = new Rectangle(gh.getScreenSize().x, gh.getScreenSize().y, gh.getScreenSize().width-1, gh.getScreenSize().height-1);
+        ball = new Ball((gh.getScreenSize().width/2)-(ballSize/2), (gh.getScreenSize().height/2)-(ballSize/2),
                 ballSpeed, ballSpeed, ballSize, ballSize, velocityIncrease, maxBallSpeed);
         ball.setDirection(direction);
     }
@@ -182,46 +160,40 @@ public class Game extends JFrame {
             if(!ball.updatePosition(ballBoundries)) {
                 this.resetBall();
             }
-            // Random start movement
-            // Continue in that position
-            // On Top/Bottom, do bounce
-            // On Left/Right add to player score, kill, and make new ball
-            // On paddle touch bounce
     }
 
     /**
      * Render Graphics
      */
     private void render() {
-        Graphics g = getGraphics();
-        Graphics bbg = backBuffer.getGraphics();
+        Graphics canvas = gh.backBuffer();
 
-        // Clear screen
-        bbg.setColor(gameBackground);
-        bbg.fillRect(0, 0, screenSize.width, screenSize.height);
+            // Clear screen
+            canvas.setColor(gameBackground);
+            canvas.fillRect(0, 0, gh.getScreenSize().width, gh.getScreenSize().height);
 
-        // Net
-        bbg.setColor(gameForeground);
-        bbg.fillRect((screenSize.width/2)-4, 20, 8, screenSize.height-40);
+            // Net
+            canvas.setColor(gameForeground);
+            canvas.fillRect((gh.getScreenSize().width/2)-4, 20, 8, gh.getScreenSize().height-40);
 
-        // Boundries
-        if(showBoundries) {
-            bbg.setColor(Color.RED);
-            bbg.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
-            bbg.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
-            bbg.setColor(Color.YELLOW);
-            bbg.drawRect(ballBoundries.x, ballBoundries.y, ballBoundries.width, ballBoundries.height);
-        }
+            // Boundries
+            if(showBoundries) {
+                canvas.setColor(Color.RED);
+                canvas.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
+                canvas.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
+                canvas.setColor(Color.YELLOW);
+                canvas.drawRect(ballBoundries.x, ballBoundries.y, ballBoundries.width, ballBoundries.height);
+            }
 
-        // Draw Players
-        playerOne.Draw(bbg);
-        playerTwo.Draw(bbg);
+            // Draw Players
+            playerOne.Draw(canvas);
+            playerTwo.Draw(canvas);
 
-        // Draw Ball
-        ball.Draw(bbg);
+            // Draw Ball
+            ball.Draw(canvas);
 
-        // Draw buffer to screen
-        g.drawImage(backBuffer, insets.left, insets.top, this);
+        // Draw backbuffer to screen
+        gh.render();
     }
 
     public static void main(String[] args) {

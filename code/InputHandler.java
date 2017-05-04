@@ -26,7 +26,7 @@ public class InputHandler implements KeyListener {
         }
     }
 
-    public InputHandler(Game g) {
+    public InputHandler(GraphicsHandler g) {
         g.addKeyListener(this);
     }
 
