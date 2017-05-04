@@ -108,16 +108,13 @@ public class Game extends JFrame {
         double velocityIncrease = 1.2;
         int maxBallSpeed = 50;
 
-        double directionX = (double)(rnd.nextInt(2)-1);
-        double directionY = (double)(rnd.nextInt(2)-1);
-
-        System.out.println(directionX);
-        System.out.println(directionY);
+        int direction = rnd.nextInt(360);
+        System.out.println("BALL DIRECTION: " + direction);
 
         ballBoundries = new Rectangle(screenSize.x, screenSize.y, screenSize.width-1, screenSize.height-1);
         ball = new Ball((screenSize.width/2)-(ballSize/2), (screenSize.height/2)-(ballSize/2),
                 ballSpeed, ballSpeed, ballSize, ballSize, velocityIncrease, maxBallSpeed);
-        ball.setDirection(directionX, directionY);
+        ball.setDirection(direction);
     }
 
     /**
@@ -202,6 +199,10 @@ public class Game extends JFrame {
         // Clear screen
         bbg.setColor(gameBackground);
         bbg.fillRect(0, 0, screenSize.width, screenSize.height);
+
+        // Net
+        bbg.setColor(gameForeground);
+        bbg.fillRect((screenSize.width/2)-4, 20, 8, screenSize.height-40);
 
         // Boundries
         if(showBoundries) {
