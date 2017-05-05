@@ -22,13 +22,9 @@ public class Ball extends Sprite {
     public void setDirection(int degree) {
         if(degree > 85 && degree < 95) { degree = 85; }
         if(degree > 265 && degree < 275) { degree = 275; }
-
         this.direction = degree;
 
         double radians = (Math.PI/180 * degree);
-        System.out.println("  - X: " + Math.cos(radians));
-        System.out.println("  - Y: " + -Math.sin(radians));
-
         this.directionX = Math.cos(radians);
         this.directionY = -Math.sin(radians);
     }
@@ -45,10 +41,6 @@ public class Ball extends Sprite {
         if (this.velocityY < this.maxBallSpeed) {
             this.velocityY = (int) (this.velocityY * velocityIncrease);
         } else { this.velocityY = this.maxBallSpeed; }
-
-        System.out.println("BALL SPEED CONSTANT: " + velocityIncrease);
-        System.out.println("  - X: " + this.velocityX);
-        System.out.println("  - Y: " + this.velocityY);
     }
 
     public boolean updatePosition(Rectangle boundries) {

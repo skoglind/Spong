@@ -13,6 +13,11 @@ public class Controller {
 
     protected Color gameBackground = Color.BLACK;
     protected Color gameForeground = Color.WHITE;
+    protected Color buttonColor = Color.WHITE;
+    protected Color activeButtonColor = Color.YELLOW;
+
+    protected Font headerFont = new Font("Arial", Font.BOLD, 56);
+    protected Font buttonFont = new Font("Arial", Font.BOLD, 38);
 
     public Controller(GraphicsHandler gh, InputHandler input) {
         this.rnd = new Random();

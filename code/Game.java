@@ -9,7 +9,7 @@ public class Game {
     public GameState state;
 
     // Game Settings
-    private String gameTitle = "Spong";
+    public static String gameTitle = "Spong";
     private int windowWidth = 800;
     private int windowHeight = 600;
     private int gameloopFPS = 60;
@@ -35,8 +35,9 @@ public class Game {
         pause = new PauseController(gh, input);
 
         // Startstate
-        state = GameState.GAME;
-        gc.init();
+        state = GameState.MENU;
+        //gc.init();
+        menu.init();
     }
 
     private void run() {
