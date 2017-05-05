@@ -32,6 +32,8 @@ public class InputHandler implements KeyListener {
 
     public List<Key> keys = new ArrayList<>();
 
+    public Key pause = new Key();
+    public Key enter = new Key();
     public Key escape = new Key();
     public Key debug = new Key();
 
@@ -56,6 +58,8 @@ public class InputHandler implements KeyListener {
         if(e.getKeyCode() == KeyEvent.VK_1) { up_p2.toggle(keyPress); }
         if(e.getKeyCode() == KeyEvent.VK_Q) { down_p2.toggle(keyPress); }
 
+        if(e.getKeyCode() == KeyEvent.VK_P) { pause.toggle(keyPress); }
+        if(e.getKeyCode() == KeyEvent.VK_ENTER) { enter.toggle(keyPress); }
         if(e.getKeyCode() == KeyEvent.VK_0) { debug.toggle(keyPress); }
     }
 

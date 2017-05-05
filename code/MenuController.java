@@ -23,13 +23,19 @@ public class MenuController extends Controller {
     }
 
     private ArrayList<MenuButton> menuButtons = new ArrayList<>();
+    private int selectedID = 0;
 
-    public MenuController(GraphicsHandler gh, InputHandler input) {
-        super(gh, input);
+    // Cooldowns
+    private int keyPressCoolDown_Menu = 0;
+
+    public MenuController(Game game, GraphicsHandler gh, InputHandler input) {
+        super(game, gh, input);
     }
 
     public void dispose() {
         super.dispose();
+        menuButtons.clear();
+        selectedID = 0;
     }
 
     public void init() {
@@ -42,7 +48,50 @@ public class MenuController extends Controller {
     }
 
     public void logic() {
-        // Nothing
+        // Quit Game
+        if (input.escape.keyDown) {
+            game.quit();
+        }
+
+        // Move in menu
+        keyPressCoolDown_Menu = keyPressCoolDown_Menu - 1;
+        if(keyPressCoolDown_Menu <= 0) {
+            keyPressCoolDown_Menu = 0;
+            if (input.down_p1.keyDown) {
+                keyPressCoolDown_Menu = 8;
+                setSelected(selectedID+1);
+            }
+
+            if (input.up_p1.keyDown) {
+                keyPressCoolDown_Menu = 8;
+                setSelected(selectedID-1);
+            }
+        }
+
+        // Use menuitem
+        if (input.enter.keyDown) {
+            switch(menuButtons.get(selectedID).action) {
+                case PLAY:
+                    input.releaseAll();
+                    game.setState(GameState.GAME, true);
+                    break;
+                case QUIT:
+                    game.quit();
+                    break;
+            }
+        }
+    }
+
+    private void setSelected(int newIndex) {
+        for (MenuButton button : menuButtons) {
+            button.selected = false;
+        }
+
+        if(newIndex > menuButtons.size()-1) { newIndex = menuButtons.size()-1; }
+        if(newIndex < 0) { newIndex = 0; }
+        selectedID = newIndex;
+
+        menuButtons.get(selectedID).selected = true;
     }
 
     public void render() {

@@ -19,6 +19,25 @@ public class Game {
     private MenuController menu;
     private PauseController pause;
 
+    public void setState(GameState state, boolean doInit) {
+        this.state = state;
+        switch(state) {
+            case MENU:
+                if(doInit) { menu.init(); }
+                break;
+            case GAME:
+                if(doInit) { gc.init(); }
+                break;
+            case PAUSE:
+                if(doInit) { pause.init(); }
+                break;
+        }
+    }
+
+    public GameState getState() {
+        return state;
+    }
+
     private void init() {
         isRunning = true;
 
@@ -30,25 +49,23 @@ public class Game {
         input = new InputHandler(gh);
 
         // Controllers
-        gc = new GameController(gh, input);
-        menu = new MenuController(gh, input);
-        pause = new PauseController(gh, input);
+        gc = new GameController(this, gh, input);
+        menu = new MenuController(this, gh, input);
+        pause = new PauseController(this, gh, input);
 
         // Startstate
-        state = GameState.MENU;
-        //gc.init();
-        menu.init();
+        setState(GameState.MENU, true);
+    }
+
+    public void quit() {
+        isRunning = false;
+        System.exit(0);
     }
 
     private void run() {
         init();
 
         while(isRunning) {
-            if(input.escape.keyDown) {
-                isRunning = false;
-                System.exit(0);
-            }
-
             switch(state) {
                 case MENU:
                     menu.logic();

@@ -14,8 +14,16 @@ public class GameController extends Controller {
     private Ball ball;
     private Rectangle ballBoundries;
 
-    public GameController(GraphicsHandler gh, InputHandler input) {
-        super(gh, input);
+    // Scorecount
+    private int playerOneScore = 0;
+    private int playerTwoScore = 0;
+
+    // Cooldowns
+    private int ballCollideCoolDown = 0;
+    private int keyPressCoolDown_Debug = 0;
+
+    public GameController(Game game, GraphicsHandler gh, InputHandler input) {
+        super(game, gh, input);
     }
 
     public void init() {
@@ -34,12 +42,35 @@ public class GameController extends Controller {
         ball = null;
         ballBoundries = null;
         showBoundries = false;
+        playerOneScore = 0;
+        playerTwoScore = 0;
     }
 
     public void logic() {
+        // Stop Game
+        if (input.escape.keyDown) {
+            input.releaseAll();
+            game.setState(GameState.MENU, true);
+        }
+
+        // Pause Game
+        if (input.pause.keyDown) {
+            input.releaseAll();
+            game.setState(GameState.PAUSE, true);
+        }
+
         // Show Debug info
-        if(input.debug.keyDown) {
-            showBoundries = true;
+        keyPressCoolDown_Debug = keyPressCoolDown_Debug - 1;
+        if(keyPressCoolDown_Debug <= 0) {
+            keyPressCoolDown_Debug = 0;
+            if (input.debug.keyDown) {
+                keyPressCoolDown_Debug = 15;
+                if (showBoundries) {
+                    showBoundries = false;
+                } else {
+                    showBoundries = true;
+                }
+            }
         }
 
         // Movement (Player One)
@@ -69,8 +100,32 @@ public class GameController extends Controller {
         }
 
         // Movement (Ball)
-        if(!ball.updatePosition(ballBoundries)) {
-            this.setupBall();
+        int ballStatus = ball.updatePosition(ballBoundries);
+        switch(ballStatus) {
+            case 1:
+                playerTwoScore++;
+                this.setupBall();
+                break;
+            case 2:
+                playerOneScore++;
+                this.setupBall();
+                break;
+        }
+
+        // Collision Checks
+        ballCollideCoolDown = ballCollideCoolDown - 1;
+        if(ballCollideCoolDown <= 0) {
+            ballCollideCoolDown = 0;
+
+            if (ball.collide(playerOne)) {
+                ballCollideCoolDown = 20;
+                ball.setDirection(ball.bounceDirection(playerOne, 1));
+            }
+
+            if (ball.collide(playerTwo)) {
+                ballCollideCoolDown = 20;
+                ball.setDirection(ball.bounceDirection(playerTwo, 2));
+            }
         }
     }
 
@@ -101,6 +156,19 @@ public class GameController extends Controller {
         // Draw Ball
         ball.Draw(canvas);
 
+        // Score
+        canvas.setFont(scoreFont);
+        canvas.setColor(scoreColor);
+
+        int scoreXOffset = 80;
+        int leftScoreOffset = 100;
+        int rightScoreOffset = 50;
+        if(playerOneScore > 9) { leftScoreOffset = 135; }
+        if(playerOneScore > 99) { leftScoreOffset = 170; }
+        if(playerOneScore > 999) { leftScoreOffset = 205; }
+        canvas.drawString(Integer.toString(playerOneScore), (gh.getScreenSize().width / 2) - leftScoreOffset, scoreXOffset);
+        canvas.drawString(Integer.toString(playerTwoScore), (gh.getScreenSize().width / 2) + rightScoreOffset, scoreXOffset);
+
         // Draw backbuffer to screen
         gh.render();
     }
@@ -127,10 +195,10 @@ public class GameController extends Controller {
     }
 
     private void setupBall() {
-        int ballSpeed = 10;
+        int ballSpeed = 15;
         int ballSize = 20;
-        double velocityIncrease = 1.2;
-        int maxBallSpeed = 50;
+        double velocityIncrease = 1.1;
+        int maxBallSpeed = 40;
 
         int direction = rnd.nextInt(360);
 

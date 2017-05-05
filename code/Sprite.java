@@ -25,6 +25,14 @@ public class Sprite {
         this.height = height;
     }
 
+    public boolean collide(Sprite s) {
+        return this.getHitbox().intersects(s.getHitbox());
+    }
+
+    public Rectangle getHitbox() {
+        return new Rectangle(positionX, positionY, width, height);
+    }
+
     public void setVelocityX(int velocity) {
         this.velocityX = velocity;
     }
