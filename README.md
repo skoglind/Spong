@@ -5,7 +5,7 @@ A Pong clone.
     Frameworks: AWT and Swing
 
 ### Installation
-Compile alla java-files, then run the Game-class.
+Compile all java-files, then run the Game-class.
 
     javac *.java
     java Game
