@@ -124,15 +124,15 @@ public class GameController extends Controller {
             case 1:
                 playerTwoScore++;
                 this.setupBall();
-                sound.playSound(looseBall, 1);
+                sound.playSound(looseBall, 0);
                 break;
             case 2:
                 playerOneScore++;
                 this.setupBall();
-                sound.playSound(looseBall, 1);
+                sound.playSound(looseBall, 0);
                 break;
             case 3:
-                sound.playSound(ballBounce, 1);
+                sound.playSound(ballBounce, 0);
                 break;
         }
 
@@ -144,13 +144,13 @@ public class GameController extends Controller {
             if (ball.collide(playerOne)) {
                 ballCollideCoolDown = 20;
                 ball.setDirection(ball.bounceDirection(playerOne, 1));
-                sound.playSound(ballBounce, 1);
+                sound.playSound(ballBounce, 0);
             }
 
             if (ball.collide(playerTwo)) {
                 ballCollideCoolDown = 20;
                 ball.setDirection(ball.bounceDirection(playerTwo, 2));
-                sound.playSound(ballBounce, 1);
+                sound.playSound(ballBounce, 0);
             }
         }
     }
