@@ -96,10 +96,12 @@ public class Ball extends Sprite {
             newPositionY = boundries.y;
             this.directionY = -this.directionY;
             this.increaseVelocity();
+            ballStatus = 3;
         } else if((newPositionY + this.height) > (boundries.y + boundries.height)) {
             newPositionY = (boundries.y + boundries.height) - this.height;
             this.directionY = -this.directionY;
             this.increaseVelocity();
+            ballStatus = 3;
         }
 
         // Kill Ball if outside

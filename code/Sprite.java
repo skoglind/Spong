@@ -70,12 +70,9 @@ public class Sprite {
     }
 
     public void Draw(Graphics g) {
-        int borderOffset = 1;
         g.setColor(Color.WHITE);
 
-        g.drawRect(this.positionX-borderOffset, this.positionY-borderOffset,
-                   this.width+(borderOffset*2), this.height+(borderOffset*2));
-
         g.drawImage(spriteImage, positionX, positionY, width, height, gh);
+        //g.drawRect(this.positionX, this.positionY, this.width, this.height);
     }
 }
