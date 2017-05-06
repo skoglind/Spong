@@ -5,8 +5,8 @@ import java.awt.*;
  * @author Fredrik Skoglind
  */
 public class PauseController extends Controller {
-    public PauseController(Game game, GraphicsHandler gh, InputHandler input) {
-        super(game, gh, input);
+    public PauseController(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
+        super(game, gh, input, sound);
     }
 
     public void dispose() {

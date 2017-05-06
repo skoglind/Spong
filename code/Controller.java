@@ -11,6 +11,7 @@ public class Controller {
     protected Game game;
     protected GraphicsHandler gh;
     protected InputHandler input;
+    protected AudioHandler sound;
 
     protected Color gameBackground = Color.BLACK;
     protected Color gameForeground = Color.WHITE;
@@ -22,11 +23,12 @@ public class Controller {
     protected Font buttonFont = new Font("Arial", Font.BOLD, 38);
     protected Font scoreFont = new Font("Arial", Font.BOLD, 70);
 
-    public Controller(Game game, GraphicsHandler gh, InputHandler input) {
+    public Controller(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
         this.game = game;
         this.rnd = new Random();
         this.gh = gh;
         this.input = input;
+        this.sound = sound;
     }
 
     public void dispose() {

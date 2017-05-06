@@ -31,8 +31,8 @@ public class GameController extends Controller {
     // Spritesheets
     private String gameSpritesheet = "spritesheet/game.png";
 
-    public GameController(Game game, GraphicsHandler gh, InputHandler input) {
-        super(game, gh, input);
+    public GameController(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
+        super(game, gh, input, sound);
     }
 
     public void init() {

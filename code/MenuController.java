@@ -28,8 +28,8 @@ public class MenuController extends Controller {
     // Cooldowns
     private int keyPressCoolDown_Menu = 0;
 
-    public MenuController(Game game, GraphicsHandler gh, InputHandler input) {
-        super(game, gh, input);
+    public MenuController(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
+        super(game, gh, input, sound);
     }
 
     public void dispose() {

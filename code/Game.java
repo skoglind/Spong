@@ -4,8 +4,11 @@
  */
 public class Game {
     private boolean isRunning = false;
+
     private InputHandler input;
     private GraphicsHandler gh;
+    private AudioHandler sound;
+
     public GameState state;
 
     // Game Settings
@@ -48,10 +51,13 @@ public class Game {
         // InputHandler
         input = new InputHandler(gh);
 
+        // SoundHandler
+        sound = new AudioHandler();
+
         // Controllers
-        gc = new GameController(this, gh, input);
-        menu = new MenuController(this, gh, input);
-        pause = new PauseController(this, gh, input);
+        gc = new GameController(this, gh, input, sound);
+        menu = new MenuController(this, gh, input, sound);
+        pause = new PauseController(this, gh, input, sound);
 
         // Startstate
         setState(GameState.MENU, true);
