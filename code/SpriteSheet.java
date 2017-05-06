@@ -13,7 +13,7 @@ public class SpriteSheet {
 
     public SpriteSheet(String filename) {
         this.filename = filename;
-        try {3
+        try {
             spritesheet = ImageIO.read(new File(filename));
         } catch (IOException e) {
             e.printStackTrace();
