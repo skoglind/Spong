@@ -1,12 +1,13 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Paddle Class
  * @author Fredrik Skoglind
  */
 public class Paddle extends Sprite {
-    public Paddle(int positionX, int positionY, int velocityX, int velocityY, int width, int height) {
-        super(positionX, positionY, velocityX, velocityY, width, height);
+    public Paddle(GraphicsHandler gh, BufferedImage spriteImage, int positionX, int positionY, int velocityX, int velocityY, int width, int height) {
+        super(gh, spriteImage, positionX, positionY, velocityX, velocityY, width, height);
     }
 
     public void moveUp(Rectangle boundries) {
@@ -35,6 +36,5 @@ public class Paddle extends Sprite {
 
     public void Draw(Graphics g) {
         super.Draw(g);
-        // Graphics
     }
 }

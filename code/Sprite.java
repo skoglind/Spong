@@ -1,10 +1,14 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Sprite Class
  * @author Fredrik Skoglind
  */
 public class Sprite {
+    protected BufferedImage spriteImage;
+    protected GraphicsHandler gh;
+
     protected int positionX;
     protected int positionY;
 
@@ -14,7 +18,10 @@ public class Sprite {
     protected int width;
     protected int height;
 
-    public Sprite(int positionX, int positionY, int velocityX, int velocityY, int width, int height) {
+    public Sprite(GraphicsHandler gh, BufferedImage spriteImage, int positionX, int positionY, int velocityX, int velocityY, int width, int height) {
+        this.gh = gh;
+        this.spriteImage = spriteImage;
+
         this.positionX = positionX;
         this.positionY = positionY;
 
@@ -63,7 +70,12 @@ public class Sprite {
     }
 
     public void Draw(Graphics g) {
+        int borderOffset = 1;
         g.setColor(Color.WHITE);
-        g.fillRect(this.positionX, this.positionY, this.width, this.height);
+
+        g.drawRect(this.positionX-borderOffset, this.positionY-borderOffset,
+                   this.width+(borderOffset*2), this.height+(borderOffset*2));
+
+        g.drawImage(spriteImage, positionX, positionY, width, height, gh);
     }
 }

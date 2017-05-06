@@ -1,10 +1,12 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * GameController
  * @author Fredrik Skoglind
  */
 public class GameController extends Controller {
+    public SpriteSheet spritesheetGame;
     public boolean showBoundries = false;
 
     private Paddle playerOne;
@@ -14,6 +16,10 @@ public class GameController extends Controller {
     private Ball ball;
     private Rectangle ballBoundries;
 
+    // Graphics
+    private BufferedImage imgPlayer;
+    private BufferedImage imgBall;
+
     // Scorecount
     private int playerOneScore = 0;
     private int playerTwoScore = 0;
@@ -22,12 +28,21 @@ public class GameController extends Controller {
     private int ballCollideCoolDown = 0;
     private int keyPressCoolDown_Debug = 0;
 
+    // Spritesheets
+    private String gameSpritesheet = "spritesheet/game.png";
+
     public GameController(Game game, GraphicsHandler gh, InputHandler input) {
         super(game, gh, input);
     }
 
     public void init() {
         dispose();
+
+        // Load sprites
+        spritesheetGame = new SpriteSheet(gameSpritesheet);
+        imgPlayer = spritesheetGame.getImage(0, 0, 20, 100);
+        imgBall = spritesheetGame.getImage(20, 0, 20, 20);
+
         this.setupPlayers();
         this.setupBall();
     }
@@ -149,12 +164,12 @@ public class GameController extends Controller {
             canvas.drawRect(ballBoundries.x, ballBoundries.y, ballBoundries.width, ballBoundries.height);
         }
 
+        // Draw Ball
+        ball.Draw(canvas);
+
         // Draw Players
         playerOne.Draw(canvas);
         playerTwo.Draw(canvas);
-
-        // Draw Ball
-        ball.Draw(canvas);
 
         // Score
         canvas.setFont(scoreFont);
@@ -183,13 +198,13 @@ public class GameController extends Controller {
 
         // Player One
         playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, gh.getScreenSize().height-1);
-        playerOne = new Paddle(playerOneOffsetX, (gh.getScreenSize().height/2)-(playerHeight/2),
+        playerOne = new Paddle(gh, imgPlayer, playerOneOffsetX, (gh.getScreenSize().height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
 
         // Player Two
         playerTwoBoundries = new Rectangle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth), 0,
                 playerWidth, gh.getScreenSize().height-1);
-        playerTwo = new Paddle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth),
+        playerTwo = new Paddle(gh, imgPlayer, gh.getScreenSize().width - (playerTwoOffsetX + playerWidth),
                 (gh.getScreenSize().height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
     }
@@ -200,10 +215,11 @@ public class GameController extends Controller {
         double velocityIncrease = 1.1;
         int maxBallSpeed = 40;
 
+        // Start direction
         int direction = rnd.nextInt(360);
 
         ballBoundries = new Rectangle(gh.getScreenSize().x, gh.getScreenSize().y, gh.getScreenSize().width-1, gh.getScreenSize().height-1);
-        ball = new Ball((gh.getScreenSize().width/2)-(ballSize/2), (gh.getScreenSize().height/2)-(ballSize/2),
+        ball = new Ball(gh, imgBall, (gh.getScreenSize().width/2)-(ballSize/2), (gh.getScreenSize().height/2)-(ballSize/2),
                 ballSpeed, ballSpeed, ballSize, ballSize, velocityIncrease, maxBallSpeed);
         ball.setDirection(direction);
     }

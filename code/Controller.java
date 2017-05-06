@@ -34,14 +34,11 @@ public class Controller {
     }
 
     public void init() {
-        // Nothing
     }
 
     public void logic() {
-        // Nothing
     }
 
     public void render() {
-        // Nothing
     }
 }

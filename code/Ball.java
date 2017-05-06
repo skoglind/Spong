@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 /**
  * Ball Class
@@ -11,8 +12,8 @@ public class Ball extends Sprite {
     private double velocityIncrease;
     private int maxBallSpeed;
 
-    public Ball(int positionX, int positionY, int velocityX, int velocityY, int width, int height, double velocityIncrease, int maxBallSpeed) {
-        super(positionX, positionY, velocityX, velocityY, width, height);
+    public Ball(GraphicsHandler gh, BufferedImage spriteImage, int positionX, int positionY, int velocityX, int velocityY, int width, int height, double velocityIncrease, int maxBallSpeed) {
+        super(gh, spriteImage, positionX, positionY, velocityX, velocityY, width, height);
         this.directionX = 0;
         this.directionY = 0;
         this.velocityIncrease = velocityIncrease;
@@ -116,6 +117,5 @@ public class Ball extends Sprite {
 
     public void Draw(Graphics g) {
         super.Draw(g);
-        // Graphics
     }
 }
