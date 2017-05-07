@@ -25,7 +25,7 @@ public class GraphicsHandler extends JFrame {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setSize(width,height);
-        getContentPane().setBackground( Color.BLUE );
+        getContentPane().setBackground( Color.BLACK );
         setLocationRelativeTo(null);
         setVisible(true);
 

@@ -13,11 +13,11 @@ public class Controller {
     protected InputHandler input;
     protected AudioHandler sound;
 
-    protected final Color gameBackground = Color.BLACK;
-    protected final Color gameForeground = Color.WHITE;
-    protected final Color scoreColor = Color.WHITE;
-    protected final Color buttonColor = Color.WHITE;
-    protected final Color activeButtonColor = Color.YELLOW;
+    protected final Color gameBackground = Color.WHITE;
+    protected final Color gameForeground = Color.BLACK;
+    protected final Color scoreColor = Color.BLACK;
+    protected final Color buttonColor = Color.BLACK;
+    protected final Color activeButtonColor = Color.BLUE;
 
     protected final Font headerFont = new Font("Arial", Font.BOLD, 56);
     protected final Font buttonFont = new Font("Arial", Font.BOLD, 38);
