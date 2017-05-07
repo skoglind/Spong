@@ -8,14 +8,14 @@ import java.awt.image.BufferedImage;
  */
 public class GameController extends Controller {
     public SpriteSheet spritesheetGame;
-    public boolean showBoundries = false;
+    public boolean showBoundaries = false;
 
     private Paddle playerOne;
     private Paddle playerTwo;
-    private Rectangle playerOneBoundries;
-    private Rectangle playerTwoBoundries;
+    private Rectangle playerOneBoundaries;
+    private Rectangle playerTwoBoundaries;
     private Ball ball;
-    private Rectangle ballBoundries;
+    private Rectangle ballBoundaries;
 
     // Graphics
     private BufferedImage imgPlayer;
@@ -30,12 +30,12 @@ public class GameController extends Controller {
     private int keyPressCoolDown_Debug = 0;
 
     // Spritesheets
-    private String gameSpritesheet = "spritesheet/game.png";
+    private final String gameSpritesheet = "spritesheet/game.png";
 
     // Sounds
-    private String ballBounce = "sound/bounce.wav";
-    private String looseBall = "sound/loose.wav";
-    private String bgmusic = "sound/bgmusic.mid";
+    private final String ballBounce = "sound/bounce.wav";
+    private final String looseBall = "sound/loose.wav";
+    private final String bgmusic = "sound/bgmusic.mid";
 
     private Sequencer musicPlayer;
 
@@ -62,11 +62,11 @@ public class GameController extends Controller {
 
         playerOne = null;
         playerTwo = null;
-        playerOneBoundries = null;
-        playerTwoBoundries = null;
+        playerOneBoundaries = null;
+        playerTwoBoundaries = null;
         ball = null;
-        ballBoundries = null;
-        showBoundries = false;
+        ballBoundaries = null;
+        showBoundaries = false;
         playerOneScore = 0;
         playerTwoScore = 0;
     }
@@ -91,11 +91,7 @@ public class GameController extends Controller {
             keyPressCoolDown_Debug = 0;
             if (input.debug.keyDown) {
                 keyPressCoolDown_Debug = 15;
-                if (showBoundries) {
-                    showBoundries = false;
-                } else {
-                    showBoundries = true;
-                }
+                showBoundaries = !showBoundaries;
             }
         }
 
@@ -107,9 +103,9 @@ public class GameController extends Controller {
         if(input.down_p1.keyDown) { moveOneDown = true; }
 
         if(moveOneUp && !moveOneDown) {
-            playerOne.moveUp(playerOneBoundries);
+            playerOne.moveUp(playerOneBoundaries);
         } else if(moveOneDown && !moveOneUp) {
-            playerOne.moveDown(playerOneBoundries);
+            playerOne.moveDown(playerOneBoundaries);
         }
 
         // Movement (Player Two)
@@ -120,13 +116,13 @@ public class GameController extends Controller {
         if(input.down_p2.keyDown) { moveTwoDown = true; }
 
         if(moveTwoUp && !moveTwoDown) {
-            playerTwo.moveUp(playerTwoBoundries);
+            playerTwo.moveUp(playerTwoBoundaries);
         } else if(moveTwoDown && !moveTwoUp) {
-            playerTwo.moveDown(playerTwoBoundries);
+            playerTwo.moveDown(playerTwoBoundaries);
         }
 
         // Movement (Ball)
-        int ballStatus = ball.updatePosition(ballBoundries);
+        int ballStatus = ball.updatePosition(ballBoundaries);
         switch(ballStatus) {
             case 1:
                 playerTwoScore++;
@@ -174,12 +170,12 @@ public class GameController extends Controller {
         canvas.fillRect((gh.getScreenSize().width/2)-4, 20, 8, gh.getScreenSize().height-40);
 
         // Boundries
-        if(showBoundries) {
+        if(showBoundaries) {
             canvas.setColor(Color.RED);
-            canvas.drawRect(playerOneBoundries.x, playerOneBoundries.y, playerOneBoundries.width, playerOneBoundries.height);
-            canvas.drawRect(playerTwoBoundries.x, playerTwoBoundries.y, playerTwoBoundries.width, playerTwoBoundries.height);
+            canvas.drawRect(playerOneBoundaries.x, playerOneBoundaries.y, playerOneBoundaries.width, playerOneBoundaries.height);
+            canvas.drawRect(playerTwoBoundaries.x, playerTwoBoundaries.y, playerTwoBoundaries.width, playerTwoBoundaries.height);
             canvas.setColor(Color.YELLOW);
-            canvas.drawRect(ballBoundries.x, ballBoundries.y, ballBoundries.width, ballBoundries.height);
+            canvas.drawRect(ballBoundaries.x, ballBoundaries.y, ballBoundaries.width, ballBoundaries.height);
         }
 
         // Draw Ball
@@ -193,14 +189,14 @@ public class GameController extends Controller {
         canvas.setFont(scoreFont);
         canvas.setColor(scoreColor);
 
-        int scoreXOffset = 80;
+        int scoreYOffset = 80;
         int leftScoreOffset = 100;
         int rightScoreOffset = 50;
         if(playerOneScore > 9) { leftScoreOffset = 135; }
         if(playerOneScore > 99) { leftScoreOffset = 170; }
         if(playerOneScore > 999) { leftScoreOffset = 205; }
-        canvas.drawString(Integer.toString(playerOneScore), (gh.getScreenSize().width / 2) - leftScoreOffset, scoreXOffset);
-        canvas.drawString(Integer.toString(playerTwoScore), (gh.getScreenSize().width / 2) + rightScoreOffset, scoreXOffset);
+        canvas.drawString(Integer.toString(playerOneScore), (gh.getScreenSize().width / 2) - leftScoreOffset, scoreYOffset);
+        canvas.drawString(Integer.toString(playerTwoScore), (gh.getScreenSize().width / 2) + rightScoreOffset, scoreYOffset);
 
         // Draw backbuffer to screen
         gh.render();
@@ -215,12 +211,12 @@ public class GameController extends Controller {
         int playerTwoOffsetX = 20;
 
         // Player One
-        playerOneBoundries = new Rectangle(playerOneOffsetX, 0, playerWidth, gh.getScreenSize().height-1);
+        playerOneBoundaries = new Rectangle(playerOneOffsetX, 0, playerWidth, gh.getScreenSize().height-1);
         playerOne = new Paddle(gh, imgPlayer, playerOneOffsetX, (gh.getScreenSize().height/2)-(playerHeight/2),
                 playerSpeedX, playerSpeedY, playerWidth, playerHeight);
 
         // Player Two
-        playerTwoBoundries = new Rectangle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth), 0,
+        playerTwoBoundaries = new Rectangle(gh.getScreenSize().width - (playerTwoOffsetX + playerWidth), 0,
                 playerWidth, gh.getScreenSize().height-1);
         playerTwo = new Paddle(gh, imgPlayer, gh.getScreenSize().width - (playerTwoOffsetX + playerWidth),
                 (gh.getScreenSize().height/2)-(playerHeight/2),
@@ -236,7 +232,7 @@ public class GameController extends Controller {
         // Start direction
         int direction = rnd.nextInt(360);
 
-        ballBoundries = new Rectangle(gh.getScreenSize().x, gh.getScreenSize().y, gh.getScreenSize().width-1, gh.getScreenSize().height-1);
+        ballBoundaries = new Rectangle(gh.getScreenSize().x, gh.getScreenSize().y, gh.getScreenSize().width-1, gh.getScreenSize().height-1);
         ball = new Ball(gh, imgBall, (gh.getScreenSize().width/2)-(ballSize/2), (gh.getScreenSize().height/2)-(ballSize/2),
                 ballSpeed, ballSpeed, ballSize, ballSize, velocityIncrease, maxBallSpeed);
         ball.setDirection(direction);

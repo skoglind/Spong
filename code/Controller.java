@@ -13,15 +13,15 @@ public class Controller {
     protected InputHandler input;
     protected AudioHandler sound;
 
-    protected Color gameBackground = Color.BLACK;
-    protected Color gameForeground = Color.WHITE;
-    protected Color scoreColor = Color.WHITE;
-    protected Color buttonColor = Color.WHITE;
-    protected Color activeButtonColor = Color.YELLOW;
+    protected final Color gameBackground = Color.BLACK;
+    protected final Color gameForeground = Color.WHITE;
+    protected final Color scoreColor = Color.WHITE;
+    protected final Color buttonColor = Color.WHITE;
+    protected final Color activeButtonColor = Color.YELLOW;
 
-    protected Font headerFont = new Font("Arial", Font.BOLD, 56);
-    protected Font buttonFont = new Font("Arial", Font.BOLD, 38);
-    protected Font scoreFont = new Font("Arial", Font.BOLD, 70);
+    protected final Font headerFont = new Font("Arial", Font.BOLD, 56);
+    protected final Font buttonFont = new Font("Arial", Font.BOLD, 38);
+    protected final Font scoreFont = new Font("Arial", Font.BOLD, 70);
 
     public Controller(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
         this.game = game;

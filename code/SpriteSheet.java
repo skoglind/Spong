@@ -8,11 +8,9 @@ import java.io.IOException;
  * @author Fredrik Skoglind
  */
 public class SpriteSheet {
-    private String filename;
     private BufferedImage spritesheet;
 
     public SpriteSheet(String filename) {
-        this.filename = filename;
         try {
             spritesheet = ImageIO.read(new File(filename));
         } catch (IOException e) {

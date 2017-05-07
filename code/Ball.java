@@ -86,28 +86,28 @@ public class Ball extends Sprite {
         } else { this.velocityY = this.maxBallSpeed; }
     }
 
-    public int updatePosition(Rectangle boundries) {
+    public int updatePosition(Rectangle boundaries) {
         int ballStatus = 0;
         int newPositionX = (int)(this.positionX + (this.directionX * this.velocityX));
         int newPositionY = (int)(this.positionY + (this.directionY * this.velocityY));
 
         // Bounce on boundries
-        if(newPositionY < boundries.y) {
-            newPositionY = boundries.y;
+        if(newPositionY < boundaries.y) {
+            newPositionY = boundaries.y;
             this.directionY = -this.directionY;
             this.increaseVelocity();
             ballStatus = 3;
-        } else if((newPositionY + this.height) > (boundries.y + boundries.height)) {
-            newPositionY = (boundries.y + boundries.height) - this.height;
+        } else if((newPositionY + this.height) > (boundaries.y + boundaries.height)) {
+            newPositionY = (boundaries.y + boundaries.height) - this.height;
             this.directionY = -this.directionY;
             this.increaseVelocity();
             ballStatus = 3;
         }
 
         // Kill Ball if outside
-        if((newPositionX + this.width) < boundries.x) {
+        if((newPositionX + this.width) < boundaries.x) {
             ballStatus = 1;
-        } else if(newPositionX > (boundries.x + boundries.width)) {
+        } else if(newPositionX > (boundaries.x + boundaries.width)) {
             ballStatus = 2;
         }
 
@@ -115,9 +115,5 @@ public class Ball extends Sprite {
         this.positionY = newPositionY;
 
         return ballStatus;
-    }
-
-    public void Draw(Graphics g) {
-        super.Draw(g);
     }
 }

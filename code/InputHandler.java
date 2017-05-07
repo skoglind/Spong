@@ -42,8 +42,8 @@ public class InputHandler implements KeyListener {
     public Key down_p2 = new Key();
 
     public void releaseAll() {
-        for (int i = 0; i < keys.size(); i++) {
-            keys.get(i).keyDown = false;
+        for(Key key : keys) {
+            key.keyDown = false;
         }
     }
 

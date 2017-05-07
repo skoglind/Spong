@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
  * @author Fredrik Skoglind
  */
 public class GraphicsHandler extends JFrame {
-    private Graphics g;
     private BufferedImage backBuffer;
     private Rectangle screenSize;
     private String title;
@@ -19,12 +18,11 @@ public class GraphicsHandler extends JFrame {
         this.title = title;
         this.width = width;
         this.height = height;
-        g = getGraphics();
     }
 
     public void showWindow() {
         setTitle(this.title);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
         setSize(width,height);
         getContentPane().setBackground( Color.BLUE );

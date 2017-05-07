@@ -4,18 +4,13 @@
  */
 public class Game {
     private boolean isRunning = false;
-
-    private InputHandler input;
-    private GraphicsHandler gh;
-    private AudioHandler sound;
-
     public GameState state;
 
     // Game Settings
-    public static String gameTitle = "Spong";
-    private int windowWidth = 800;
-    private int windowHeight = 600;
-    private int gameloopFPS = 60;
+    public static final String gameTitle = "Spong";
+    private final int windowWidth = 800;
+    private final int windowHeight = 600;
+    private final int gameloopFPS = 60;
 
     // Controllers
     private GameController gc;
@@ -45,14 +40,14 @@ public class Game {
         isRunning = true;
 
         // GraphicsHandler
-        gh = new GraphicsHandler(gameTitle, windowWidth, windowHeight);
+        GraphicsHandler gh = new GraphicsHandler(gameTitle, windowWidth, windowHeight);
         gh.showWindow();
 
         // InputHandler
-        input = new InputHandler(gh);
+        InputHandler input = new InputHandler(gh);
 
         // SoundHandler
-        sound = new AudioHandler();
+        AudioHandler sound = new AudioHandler();
 
         // Controllers
         gc = new GameController(this, gh, input, sound);
@@ -87,7 +82,7 @@ public class Game {
                     break;
             }
 
-            try { Thread.sleep(1000/gameloopFPS); } catch(Exception e) { }
+            try { Thread.sleep(1000/gameloopFPS); } catch(Exception e) { e.printStackTrace(); }
         }
 
         System.exit(0);
