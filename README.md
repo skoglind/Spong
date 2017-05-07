@@ -3,6 +3,7 @@ A Pong clone.
 
     JDK: Java 1.8
     Frameworks: AWT and Swing
+    Sounds: cfxr
 
 ### Installation
 Compile all java-files, then run the Game-class.
@@ -26,7 +27,7 @@ How to play the game?
     
 #### Author
 
-    Made by Fredrik Skoglind in Spring 2017
+    Made by Fredrik Skoglind
     
 #### License
 

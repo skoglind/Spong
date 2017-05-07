@@ -51,7 +51,7 @@ public class GameController extends Controller {
         imgPlayer = spritesheetGame.getImage(0, 0, 20, 100);
         imgBall = spritesheetGame.getImage(20, 0, 20, 20);
 
-        musicPlayer = sound.playMusic(bgmusic);
+        //musicPlayer = sound.playMusic(bgmusic); // ONLY IF MIDI-FILE is present
 
         this.setupPlayers();
         this.setupBall();
@@ -75,7 +75,7 @@ public class GameController extends Controller {
         // Stop Game
         if (input.escape.keyDown) {
             input.releaseAll();
-            musicPlayer.stop();
+            //musicPlayer.stop(); // ONLY IF MIDI-FILE is present
             game.setState(GameState.MENU, true);
         }
 
