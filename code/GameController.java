@@ -1,3 +1,4 @@
+import javax.sound.midi.Sequencer;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -34,6 +35,9 @@ public class GameController extends Controller {
     // Sounds
     private String ballBounce = "sound/bounce.wav";
     private String looseBall = "sound/loose.wav";
+    private String bgmusic = "sound/bgmusic.mid";
+
+    private Sequencer musicPlayer;
 
     public GameController(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
         super(game, gh, input, sound);
@@ -46,6 +50,8 @@ public class GameController extends Controller {
         spritesheetGame = new SpriteSheet(gameSpritesheet);
         imgPlayer = spritesheetGame.getImage(0, 0, 20, 100);
         imgBall = spritesheetGame.getImage(20, 0, 20, 20);
+
+        musicPlayer = sound.playMusic(bgmusic);
 
         this.setupPlayers();
         this.setupBall();
@@ -69,6 +75,7 @@ public class GameController extends Controller {
         // Stop Game
         if (input.escape.keyDown) {
             input.releaseAll();
+            musicPlayer.stop();
             game.setState(GameState.MENU, true);
         }
 
