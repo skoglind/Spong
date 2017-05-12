@@ -35,9 +35,6 @@ public class GameController extends Controller {
     // Sounds
     private final String ballBounce = "sound/bounce.wav";
     private final String looseBall = "sound/loose.wav";
-    private final String bgmusic = "sound/bgmusic.mid";
-
-    private Sequencer musicPlayer;
 
     public GameController(Game game, GraphicsHandler gh, InputHandler input, AudioHandler sound) {
         super(game, gh, input, sound);
@@ -50,8 +47,6 @@ public class GameController extends Controller {
         spritesheetGame = new SpriteSheet(gameSpritesheet);
         imgPlayer = spritesheetGame.getImage(0, 0, 20, 100);
         imgBall = spritesheetGame.getImage(20, 0, 20, 20);
-
-        //musicPlayer = sound.playMusic(bgmusic); // ONLY IF MIDI-FILE is present
 
         this.setupPlayers();
         this.setupBall();
@@ -75,7 +70,6 @@ public class GameController extends Controller {
         // Stop Game
         if (input.escape.keyDown) {
             input.releaseAll();
-            //musicPlayer.stop(); // ONLY IF MIDI-FILE is present
             game.setState(GameState.MENU, true);
         }
 
@@ -127,15 +121,15 @@ public class GameController extends Controller {
             case 1:
                 playerTwoScore++;
                 this.setupBall();
-                sound.playSound(looseBall, 0);
+                sound.playSound(looseBall);
                 break;
             case 2:
                 playerOneScore++;
                 this.setupBall();
-                sound.playSound(looseBall, 0);
+                sound.playSound(looseBall);
                 break;
             case 3:
-                sound.playSound(ballBounce, 0);
+                sound.playSound(ballBounce);
                 break;
         }
 
@@ -147,13 +141,13 @@ public class GameController extends Controller {
             if (ball.collide(playerOne)) {
                 ballCollideCoolDown = 20;
                 ball.setDirection(ball.bounceDirection(playerOne, 1));
-                sound.playSound(ballBounce, 0);
+                sound.playSound(ballBounce);
             }
 
             if (ball.collide(playerTwo)) {
                 ballCollideCoolDown = 20;
                 ball.setDirection(ball.bounceDirection(playerTwo, 2));
-                sound.playSound(ballBounce, 0);
+                sound.playSound(ballBounce);
             }
         }
     }
