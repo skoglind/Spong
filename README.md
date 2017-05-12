@@ -2,7 +2,7 @@
 A Pong clone.
 
     JDK: Java 1.8
-    Frameworks: AWT and Swing
+    Frameworks: AWT, Swing and JavaFX
     Sounds: cfxr
 
 ### Installation
